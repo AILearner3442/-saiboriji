@@ -1,9 +1,12 @@
+
+
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>神经日志</title>
+<title>赛博Diary</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Noto+Serif+SC:wght@300;400;600&display=swap');
 
@@ -84,30 +87,28 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'No
 #composer-expand{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.22,1,.36,1);pointer-events:none;}
 #composer.expanded #composer-expand{max-height:460px;pointer-events:all;}
 
-#comp-img-strip{display:flex;align-items:center;gap:10px;padding:0 20px 10px;}
-#comp-img-thumb{width:52px;height:52px;border-radius:6px;object-fit:cover;display:none;border:1px solid rgba(0,245,255,.3);}
-#comp-img-btn{width:52px;height:52px;border-radius:6px;border:1px dashed rgba(0,245,255,.25);background:rgba(0,245,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;flex-shrink:0;transition:all .2s;}
-#comp-img-btn:active{border-color:var(--c);}
-#comp-img-btn span{font-size:18px;}
-#comp-img-btn small{font-family:'Share Tech Mono',monospace;font-size:7px;color:rgba(0,245,255,.3);letter-spacing:1px;}
+/* WeChat-style composer toolbar: mic | input | send */
+#comp-img-strip{display:none;}
+#comp-toolbar{display:flex;align-items:center;padding:6px 10px 2px;gap:8px;}
+#comp-add-btn{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:300;color:rgba(255,255,255,.45);cursor:pointer;line-height:1;}
+#comp-add-btn:active{border-color:var(--c);color:var(--c);}
+#comp-img-thumb{width:38px;height:38px;border-radius:6px;object-fit:cover;display:none;border:1px solid rgba(0,245,255,.3);flex-shrink:0;}
+#comp-score-wrap{display:flex;align-items:center;gap:3px;flex:1;}
+.score-hearts-pick{display:flex;gap:1px;}
+.shp{font-size:13px;cursor:pointer;opacity:.28;transition:opacity .1s;-webkit-user-select:none;user-select:none;line-height:1;}
+.shp.active{opacity:1;}
+#new-score-val{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,.28);margin-left:2px;}
+.score-picker-row{display:none;}
 
-/* Score picker in composer */
-.score-picker-row{padding:0 20px 10px;display:flex;align-items:center;gap:8px;}
-.score-picker-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,.3);letter-spacing:1px;white-space:nowrap;}
-.score-hearts-pick{display:flex;gap:3px;}
-.shp{font-size:18px;cursor:pointer;opacity:.35;transition:all .15s;-webkit-user-select:none;user-select:none;}
-.shp.active{opacity:1;transform:scale(1.15);}
-
-#comp-text-row{display:flex;align-items:flex-end;gap:10px;padding:0 14px 0 20px;}
-#transcript-text{flex:1;min-height:40px;max-height:110px;background:rgba(255,255,255,.04);border:1px solid rgba(0,245,255,.15);border-radius:4px;color:rgba(255,255,255,.88);font-family:'Noto Serif SC',serif;font-size:15px;line-height:1.7;padding:10px 14px;outline:none;resize:none;caret-color:var(--c);}
-#transcript-text:focus{border-color:rgba(0,245,255,.4);}
-#transcript-text::placeholder{color:rgba(255,255,255,.18);font-size:13px;}
-
-/* Voice button in composer */
-#comp-voice-btn{flex-shrink:0;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(0,245,255,.4);background:rgba(0,245,255,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:20px;cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:manipulation;}
+/* Main input row: voice mic | textarea | send — like WeChat */
+#comp-text-row{display:flex;align-items:flex-end;gap:8px;padding:6px 10px calc(env(safe-area-inset-bottom,0px)+8px);}
+#comp-voice-btn{flex-shrink:0;width:36px;height:36px;border-radius:50%;border:1px solid rgba(0,245,255,.25);background:rgba(0,245,255,.04);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;touch-action:manipulation;}
 #comp-voice-btn.recording{border-color:var(--m);background:rgba(255,0,144,.1);animation:mr 1.2s ease infinite;}
-#save-btn{flex-shrink:0;width:44px;height:44px;background:var(--c);border:none;border-radius:4px;color:var(--dark);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);}
-#save-btn:active{box-shadow:0 0 24px rgba(0,245,255,.5);}
+#transcript-text{flex:1;min-height:36px;max-height:96px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;color:rgba(255,255,255,.88);font-family:'Noto Serif SC',serif;font-size:15px;line-height:1.6;padding:7px 14px;outline:none;resize:none;caret-color:var(--c);}
+#transcript-text:focus{border-color:rgba(0,245,255,.3);}
+#transcript-text::placeholder{color:rgba(255,255,255,.18);font-size:13px;}
+#save-btn{flex-shrink:0;width:36px;height:36px;background:var(--c);border:none;border-radius:50%;color:var(--dark);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#save-btn:active{box-shadow:0 0 16px rgba(0,245,255,.5);}
 
 /* ── TOP NAV ── */
 #top-nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:max(env(safe-area-inset-top,0px),40px) 22px 14px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;}
@@ -144,8 +145,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'No
 .dp-edit-btn{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,245,255,.5);letter-spacing:2px;padding:8px 12px;border:1px solid rgba(0,245,255,.2);cursor:pointer;}
 .dp-edit-btn:active{background:rgba(0,245,255,.08);}
 
-.dp-body{position:relative;z-index:2;flex:1;overflow-y:auto;scrollbar-width:none;}
-.dp-body::-webkit-scrollbar{display:none;}
+/* dp-body replaced by #dp-scroll in flex layout */
 
 .dp-cover{width:100%;height:220px;object-fit:cover;display:block;opacity:.85;}
 .dp-cover-none{width:100%;height:80px;background:linear-gradient(135deg,rgba(0,30,50,.8),rgba(0,10,20,.9));}
@@ -163,35 +163,58 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'No
 .dp-body-text{font-family:'Noto Serif SC',serif;font-size:15px;line-height:2.1;color:rgba(255,255,255,.8);white-space:pre-wrap;}
 
 /* AI Chat in detail */
-.dp-chat-section{padding:0 22px 100px;}
-.dp-chat-divider{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.dp-chat-section{padding:0 16px 24px;}
+.dp-chat-divider{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
 .dp-chat-divider::before,.dp-chat-divider::after{content:'';flex:1;height:1px;background:rgba(0,245,255,.12);}
 .dp-chat-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,245,255,.4);letter-spacing:3px;white-space:nowrap;}
 
-.chat-log{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;}
-.chat-msg{display:flex;flex-direction:column;gap:4px;}
+.chat-log{display:flex;flex-direction:column;gap:10px;}
+.chat-msg{display:flex;flex-direction:column;gap:3px;}
 .chat-msg.user{align-items:flex-end;}
 .chat-msg.ai{align-items:flex-start;}
-.chat-bubble{max-width:82%;padding:10px 14px;font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.8;}
+.chat-bubble{max-width:80%;padding:9px 13px;font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.75;}
 .chat-msg.user .chat-bubble{background:rgba(0,245,255,.12);border:1px solid rgba(0,245,255,.2);color:rgba(255,255,255,.9);border-radius:14px 14px 2px 14px;}
-.chat-msg.ai .chat-bubble{background:rgba(255,0,144,.06);border:1px solid rgba(255,0,144,.15);color:rgba(255,255,255,.75);border-radius:14px 14px 14px 2px;}
+.chat-msg.ai .chat-bubble{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.75);border-radius:14px 14px 14px 2px;}
 .chat-time{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(255,255,255,.2);letter-spacing:1px;}
 .chat-thinking{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,0,144,.4);letter-spacing:2px;animation:blink .8s infinite;}
 @keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
 
-/* Chat input bar - fixed at bottom of detail */
+/* Detail panel: true flex column so input bar sits naturally at bottom */
+#dp-scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+#dp-scroll::-webkit-scrollbar{display:none;}
+
+/* Chat input bar — flex child, keyboard pushes it up naturally */
 #dp-input-bar{
-  position:absolute;bottom:0;left:0;right:0;z-index:3;
-  padding:10px 14px calc(env(safe-area-inset-bottom,0px)+10px);
-  background:rgba(3,8,16,.96);border-top:1px solid rgba(0,245,255,.1);
-  display:flex;gap:8px;align-items:flex-end;
+  flex-shrink:0;
+  padding:8px 12px calc(env(safe-area-inset-bottom,0px)+6px);
+  background:rgba(4,10,20,.97);
+  border-top:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:flex-end;gap:8px;
 }
-#dp-chat-input{flex:1;min-height:38px;max-height:90px;background:rgba(255,255,255,.04);border:1px solid rgba(0,245,255,.15);border-radius:4px;color:rgba(255,255,255,.88);font-family:'Noto Serif SC',serif;font-size:14px;line-height:1.7;padding:8px 12px;outline:none;resize:none;caret-color:var(--c);}
-#dp-chat-input:focus{border-color:rgba(0,245,255,.35);}
-#dp-chat-input::placeholder{color:rgba(255,255,255,.15);font-size:12px;}
-#dp-voice-btn{flex-shrink:0;width:38px;height:38px;border-radius:50%;border:1px solid rgba(0,245,255,.3);background:rgba(0,245,255,.04);display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;touch-action:manipulation;}
+#dp-chat-input{
+  flex:1;min-height:36px;max-height:80px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  color:rgba(255,255,255,.88);font-family:'Noto Serif SC',serif;font-size:14px;line-height:1.6;
+  padding:7px 14px;outline:none;resize:none;caret-color:var(--c);
+}
+#dp-chat-input:focus{border-color:rgba(0,245,255,.3);}
+#dp-chat-input::placeholder{color:rgba(255,255,255,.18);font-size:12px;}
+/* Single mic button for chat voice */
+#dp-voice-btn{
+  flex-shrink:0;width:36px;height:36px;border-radius:50%;
+  border:1px solid rgba(0,245,255,.25);background:rgba(0,245,255,.04);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;cursor:pointer;touch-action:manipulation;
+}
 #dp-voice-btn.recording{border-color:var(--m);background:rgba(255,0,144,.1);animation:mr 1.2s ease infinite;}
-#dp-send-btn{flex-shrink:0;width:38px;height:38px;background:var(--c);border:none;border-radius:4px;color:var(--dark);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);}
+#dp-send-btn{
+  flex-shrink:0;width:36px;height:36px;
+  background:var(--c);border:none;border-radius:50%;
+  color:var(--dark);font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
 
 /* ══════════════════════════
    EDIT PANEL
@@ -315,7 +338,7 @@ input[type=file]{display:none;}
 
 <!-- Top nav -->
 <div id="top-nav">
-  <div class="nav-logo" onclick="goFeed()">NEURO<em>//</em>LOG</div>
+  <div class="nav-logo" onclick="goFeed()">Cyber<em>//</em>Diary</div>
   <div class="nav-right">
     <div class="nav-dot"></div>
     <div class="nav-btn" onclick="openCalendar()">📅</div>
@@ -341,7 +364,8 @@ input[type=file]{display:none;}
       <div class="dp-edit-btn" onclick="openEditFromDetail()">✏ 编辑</div>
     </div>
   </div>
-  <div class="dp-body" id="dp-body">
+  <!-- Scrollable content -->
+  <div id="dp-scroll">
     <div id="dp-cover-wrap"></div>
     <div class="dp-meta">
       <div class="dp-date" id="dp-date"></div>
@@ -355,16 +379,16 @@ input[type=file]{display:none;}
     <div class="dp-content">
       <div class="dp-body-text" id="dp-body-text"></div>
     </div>
-    <!-- AI Chat -->
+    <!-- AI Chat log -->
     <div class="dp-chat-section">
       <div class="dp-chat-divider"><span class="dp-chat-label">AI · 对话记录</span></div>
       <div class="chat-log" id="chat-log"></div>
     </div>
   </div>
-  <!-- Chat input bar -->
+  <!-- Chat input bar — flex child, sits naturally at bottom, keyboard pushes it up -->
   <div id="dp-input-bar">
+    <div id="dp-voice-btn" onclick="toggleVoiceForChat()" title="语音输入">🎙️</div>
     <textarea id="dp-chat-input" rows="1" placeholder="和 AI 聊聊这篇日记..."></textarea>
-    <div id="dp-voice-btn" onclick="toggleVoiceForChat()">🎙️</div>
     <div id="dp-send-btn" onclick="sendChat()">↑</div>
   </div>
 </div>
@@ -427,33 +451,33 @@ input[type=file]{display:none;}
 
 <div id="toast"></div>
 
-<!-- Floating Composer (hidden, tap feed to show) -->
+<!-- Floating Composer (tap feed to show) -->
 <div id="composer">
+  <!-- Teaser: just the big mic button -->
   <div id="composer-teaser">
     <div id="mic-pulse-wrap">
       <div id="mic-main-btn" onclick="handleMicTap()">
         <div>🎙️</div>
-        <div class="mic-main-label" id="mic-main-label">点击写日记</div>
+        <div class="mic-main-label" id="mic-main-label"></div>
       </div>
     </div>
-    <div id="composer-hint">TAP MIC TO WRITE</div>
+    <div id="composer-hint">TAP TO WRITE</div>
   </div>
+  <!-- Expanded: WeChat-style layout -->
   <div id="composer-expand">
-    <div id="comp-img-strip">
-      <div id="comp-img-btn" onclick="document.getElementById('fileInput').click()">
-        <span>📷</span><small>添加照片</small>
-      </div>
+    <!-- Toolbar: + photo | score hearts -->
+    <div id="comp-toolbar">
+      <div id="comp-add-btn" onclick="document.getElementById('fileInput').click()" title="添加照片">＋</div>
       <img id="comp-img-thumb" src="" alt="">
+      <div id="comp-score-wrap">
+        <div class="score-hearts-pick" id="new-score-pick"></div>
+        <span id="new-score-val"></span>
+      </div>
     </div>
-    <!-- Score picker for new entry -->
-    <div class="score-picker-row">
-      <span class="score-picker-label">心情分</span>
-      <div class="score-hearts-pick" id="new-score-pick"></div>
-      <span id="new-score-val" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);margin-left:4px;"></span>
-    </div>
+    <!-- Input row: mic | textarea | send -->
     <div id="comp-text-row">
-      <textarea id="transcript-text" rows="2" placeholder="写下今天的思绪..."></textarea>
-      <div id="comp-voice-btn" onclick="toggleVoiceForNew()">🎙️</div>
+      <div id="comp-voice-btn" onclick="toggleVoiceForNew()" title="语音输入">🎙️</div>
+      <textarea id="transcript-text" rows="1" placeholder="写下今天的思绪..."></textarea>
       <button id="save-btn" onclick="saveEntry()">↑</button>
     </div>
   </div>
@@ -588,7 +612,7 @@ function buildFeed(){
           <div class="slide-date">${e.date}</div>
         </div>
         <div class="slide-title" onclick="openDetail(${i})">${e.title}</div>
-        <div class="slide-quote">${e.body}</div>
+        <div class="slide-quote">${e.body.length>30?e.body.slice(0,30)+'…':e.body}</div>
         <div class="slide-footer">
           <div class="slide-tags">
             ${e.tags.map(t=>`<span class="stag">${t}</span>`).join('')}
@@ -891,7 +915,7 @@ function handleImg(input, target){
       imgDataUrl=ev.target.result;
       const thumb=document.getElementById('comp-img-thumb');
       if(thumb){thumb.src=imgDataUrl;thumb.style.display='block';}
-      document.getElementById('comp-img-btn').querySelector('small').textContent='更换照片';
+      // photo thumbnail shown
     } else {
       epImgDataUrl=ev.target.result;
       const img=document.getElementById('ep-photo-img');
@@ -956,7 +980,7 @@ function openDetail(idx){
 
   renderChatLog(e.chats||[]);
   document.getElementById('dp-chat-input').value = '';
-  document.getElementById('dp-body').scrollTop = 0;
+  document.getElementById('dp-scroll').scrollTop = 0;
   document.getElementById('detail-panel').classList.add('show');
   // Hide composer behind detail
   hideComposer();
@@ -982,7 +1006,7 @@ function renderChatLog(chats){
       <div class="chat-time">${c.time||''}</div>
     </div>`).join('');
   // Scroll to bottom after render
-  setTimeout(()=>{ const b=document.getElementById('dp-body'); if(b) b.scrollTop=b.scrollHeight; },100);
+  setTimeout(()=>{ const b=document.getElementById('dp-scroll'); if(b) b.scrollTop=b.scrollHeight; },100);
 }
 
 /* ═══════════ AI CHAT ═══════════ */
@@ -1009,7 +1033,7 @@ async function sendChat(){
   thinkEl.className='chat-msg ai';
   thinkEl.innerHTML='<div class="chat-bubble"><span class="chat-thinking">AI 思考中...</span></div>';
   log.appendChild(thinkEl);
-  document.getElementById('dp-body').scrollTop = document.getElementById('dp-body').scrollHeight;
+  document.getElementById('dp-scroll').scrollTop = document.getElementById('dp-scroll').scrollHeight;
 
   // Build context
   const context = `这是用户的一篇日记：
@@ -1259,3 +1283,6 @@ buildFeed();
 </script>
 </body>
 </html>
+
+
+
